@@ -2,18 +2,25 @@ import click
 import socket
 
 @click.command()
-@click.option('--ip',
-			  default='192.168.1.35',
-			  help='ip for connecting',
-			  )
-def main(ip):
-	sock = socket.socket()
-	sock.connect((ip, 1337))
-	m = 'a'
-	while m:
-		m = input()
-		sock.send(m.encode())
+@click.option('-ip',
+              '--ip',
+              default='192.168.1.35',
+              )
+@click.option(
+             '-p',
+             '--p',
+             default='1337'
+             )
+def main(ip, port):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((ip, 1337))
+
+    while True:
+	m = input()
+	sock.send(m.encode())
 	sock.close()
+        if not m:
+            break;
 
 if __name__ == '__main__':
-	main()
+    main()
